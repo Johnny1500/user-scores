@@ -1,11 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./App.css";
 import {
   List,
   ListItem,
-  ListIcon,
-  OrderedList,
-  UnorderedList,
   Tabs,
   TabList,
   TabPanels,
@@ -13,6 +10,7 @@ import {
   TabPanel,
   Text,
   Box,
+  Divider
 } from "@chakra-ui/react";
 import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
 
@@ -60,21 +58,11 @@ function App() {
   return (
     <>
       <Card p={5} pt={1}>
-        <CardHeader fontSize="xl">Users</CardHeader>
+        <CardHeader fontSize="xl" pb={3}>Users</CardHeader>
+        <Divider mb={2}/>
         <List>
           {users.map((user) => {
-            const { avatar, username, score, id, row } = user;
-
-            return (
-              <UserInfo
-                key={id}
-                id={id}
-                avatar={avatar}
-                score={score}
-                username={username}
-                row={row}
-              ></UserInfo>
-            );
+            return <UserInfo key={user.id} user={user} setUsers={(setUsers)}></UserInfo>;
           })}
         </List>
       </Card>

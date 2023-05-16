@@ -18,9 +18,16 @@
 .list__item {
   display: flex;
   flex-direction: row;
-  justify-content: start;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.3rem;  
+}
+
+.btn-block {
+
+    display: flex;
+    flex-direction: row;
+
 }
 
 @media (min-width: 900px) {
