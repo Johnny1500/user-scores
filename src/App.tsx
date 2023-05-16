@@ -11,14 +11,13 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  Text,
+  Box,
 } from "@chakra-ui/react";
+import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
 
-interface User {
-  id: string;
-  username: string;
-  avatar: string;
-  score: number;
-}
+import { User } from "./interfaces";
+import UserInfo from "./UserInfo";
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
@@ -40,13 +39,14 @@ function App() {
             username,
             avatar,
             score: 0,
+            row: true,
           };
         });
 
         setUsers(remoteUsers);
         console.log("users", users);
       } else {
-        throw new Error(response.statusText)
+        throw new Error(response.statusText);
       }
     }
 
@@ -59,34 +59,49 @@ function App() {
 
   return (
     <>
-      <List ml={10}>
-        {users.map((user) => {
-          const { avatar, username, score, id } = user;
+      <Card p={5} pt={1}>
+        <CardHeader fontSize="xl">Users</CardHeader>
+        <List>
+          {users.map((user) => {
+            const { avatar, username, score, id, row } = user;
 
-          return <ListItem key={id}>{username}</ListItem>;
-        })}
-      </List>
-      <Tabs size="md" variant="enclosed">
-        <TabList>
-          <Tab>One</Tab>
-          <Tab>Two</Tab>
-        </TabList>
+            return (
+              <UserInfo
+                key={id}
+                id={id}
+                avatar={avatar}
+                score={score}
+                username={username}
+                row={row}
+              ></UserInfo>
+            );
+          })}
+        </List>
+      </Card>
+      <Card p={5} pt={1}>
+        <CardHeader fontSize="xl">Users with rating</CardHeader>
+        <Tabs size="md" variant="enclosed">
+          <TabList>
+            <Tab>Respectable</Tab>
+            <Tab>Bully</Tab>
+          </TabList>
 
-        <TabPanels>
-          <TabPanel>
-            <List w={250}>
-              <ListItem>Lorem ipsum dolor sit amet</ListItem>
-              <ListItem>Consectetur adipiscing elit</ListItem>
-            </List>
-          </TabPanel>
-          <TabPanel>
-            <List w={250}>
-              <ListItem>Integer molestie lorem at massa</ListItem>
-              <ListItem>Facilisis in pretium nisl aliquet</ListItem>
-            </List>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+          <TabPanels>
+            <TabPanel>
+              <List w={250}>
+                <ListItem>Lorem ipsum dolor sit amet</ListItem>
+                <ListItem>Consectetur adipiscing elit</ListItem>
+              </List>
+            </TabPanel>
+            <TabPanel>
+              <List w={250}>
+                <ListItem>Integer molestie lorem at massa</ListItem>
+                <ListItem>Facilisis in pretium nisl aliquet</ListItem>
+              </List>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Card>
     </>
   );
 }
