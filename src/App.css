@@ -24,10 +24,8 @@
 }
 
 .btn-block {
-
     display: flex;
     flex-direction: row;
-
 }
 
 @media (min-width: 900px) {

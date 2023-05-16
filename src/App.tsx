@@ -1,18 +1,16 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import {
-  List,
-  ListItem,
+  List,  
   Tabs,
   TabList,
   TabPanels,
   Tab,
-  TabPanel,
-  Text,
+  TabPanel, 
   Box,
-  Divider
+  Divider,
 } from "@chakra-ui/react";
-import { Card, CardHeader, CardBody, CardFooter } from "@chakra-ui/react";
+import { Card, CardHeader, CardBody } from "@chakra-ui/react";
 
 import { User } from "./interfaces";
 import UserInfo from "./UserInfo";
@@ -58,16 +56,30 @@ function App() {
   return (
     <>
       <Card p={5} pt={1}>
-        <CardHeader fontSize="xl" pb={3}>Users</CardHeader>
-        <Divider mb={2}/>
-        <List>
-          {users.map((user) => {
-            return <UserInfo key={user.id} user={user} setUsers={(setUsers)}></UserInfo>;
-          })}
-        </List>
+        <CardHeader fontSize="xl" pb={3}>
+          Users
+        </CardHeader>
+        <Divider mb={2} />
+        <CardBody pt={1}>
+          <List>
+            {users
+              .filter((user) => user.row)
+              .map((user) => {
+                return (
+                  <UserInfo
+                    key={user.id}
+                    user={user}
+                    setUsers={setUsers}
+                  ></UserInfo>
+                );
+              })}
+          </List>
+        </CardBody>
       </Card>
       <Card p={5} pt={1}>
         <CardHeader fontSize="xl">Users with rating</CardHeader>
+        <Divider mb={2} />
+        <CardBody>
         <Tabs size="md" variant="enclosed">
           <TabList>
             <Tab>Respectable</Tab>
@@ -76,19 +88,46 @@ function App() {
 
           <TabPanels>
             <TabPanel>
-              <List w={250}>
-                <ListItem>Lorem ipsum dolor sit amet</ListItem>
-                <ListItem>Consectetur adipiscing elit</ListItem>
-              </List>
+              {users.filter((user) => user.score > 0).length ? (
+                <List>
+                  {users
+                    .filter((user) => user.score > 0)
+                    .map((user) => {
+                      return (
+                        <UserInfo
+                          key={user.id}
+                          user={user}
+                          setUsers={setUsers}
+                        ></UserInfo>
+                      );
+                    })}
+                </List>
+              ) : (
+                <Box>No users</Box>
+              )}
             </TabPanel>
             <TabPanel>
-              <List w={250}>
-                <ListItem>Integer molestie lorem at massa</ListItem>
-                <ListItem>Facilisis in pretium nisl aliquet</ListItem>
-              </List>
+              {users.filter((user) => user.score < 0).length ? (
+                <List>
+                  {users
+                    .filter((user) => user.score < 0)
+                    .map((user) => {
+                      return (
+                        <UserInfo
+                          key={user.id}
+                          user={user}
+                          setUsers={setUsers}
+                        ></UserInfo>
+                      );
+                    })}
+                </List>
+              ) : (
+                <Box>No users</Box>
+              )}
             </TabPanel>
           </TabPanels>
         </Tabs>
+        </CardBody>
       </Card>
     </>
   );

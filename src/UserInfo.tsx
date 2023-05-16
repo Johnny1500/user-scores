@@ -29,7 +29,7 @@ export function UserInfo({
         username,
         avatar,
         score: newScore,
-        row,
+        row: false,
       });
      
       return tempArr;
