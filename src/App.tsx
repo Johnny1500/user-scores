@@ -17,6 +17,7 @@ import UserInfo from "./UserInfo";
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
+  const [tabIndex, setTabIndex] = useState<number>(0)
 
   useEffect(() => {
     async function fetchUsers() {
@@ -35,7 +36,7 @@ function App() {
             username,
             avatar,
             score: 0,
-            row: true,
+            group: 'none',
           };
         });
 
@@ -55,74 +56,78 @@ function App() {
 
   return (
     <>
-      <Card p={5} pt={1}>
-        <CardHeader fontSize="xl" pb={3}>
-          Users
+      <Card className="card" minW='360px'>
+        <CardHeader fontSize="xl">
+          Пользователи
+          <Divider size="xl" mt={5} style={{borderWidth: '1px', borderColor: '#000'}}/>          
         </CardHeader>
-        <Divider mb={2} />
+        {/* <Divider mb={2}/> */}
         <CardBody pt={1}>
           <List>
             {users
-              .filter((user) => user.row)
+              .filter((user) => user.group === 'none')
               .map((user) => {
                 return (
                   <UserInfo
                     key={user.id}
                     user={user}
                     setUsers={setUsers}
+                    setTabIndex={setTabIndex}
                   ></UserInfo>
                 );
               })}
           </List>
         </CardBody>
       </Card>
-      <Card p={5} pt={1}>
-        <CardHeader fontSize="xl">Users with rating</CardHeader>
-        <Divider mb={2} />
+      <Card p={5} pt={1} minW='360px'>
+        <CardHeader fontSize="xl" pl={0}>Пользователи с рейтингом</CardHeader>
+        <Divider mb={2} style={{borderWidth: '1px', borderColor: '#000'}} />
         <CardBody>
-        <Tabs size="md" variant="enclosed">
+        <Tabs size="md" variant="enclosed" index={tabIndex}>
           <TabList>
-            <Tab>Respectable</Tab>
-            <Tab>Bully</Tab>
+            <Tab>Уважаемые</Tab>
+            <Tab>Нарушители</Tab>
           </TabList>
 
           <TabPanels>
             <TabPanel>
-              {users.filter((user) => user.score > 0).length ? (
+              {users.filter((user) => user.group === 'respectable').length ? (
                 <List>
                   {users
-                    .filter((user) => user.score > 0)
+                    .filter((user) => user.group === 'respectable')
                     .map((user) => {
                       return (
                         <UserInfo
                           key={user.id}
                           user={user}
                           setUsers={setUsers}
+                          setTabIndex={setTabIndex}
                         ></UserInfo>
                       );
                     })}
                 </List>
               ) : (
-                <Box>No users</Box>
+                <Box>Нет пользователей</Box>
               )}
             </TabPanel>
             <TabPanel>
-              {users.filter((user) => user.score < 0).length ? (
+              {users.filter((user) => user.group === 'bully').length ? (
                 <List>
                   {users
-                    .filter((user) => user.score < 0)
+                    .filter((user) => user.group === 'bully')
                     .map((user) => {
                       return (
                         <UserInfo
                           key={user.id}
                           user={user}
                           setUsers={setUsers}
+                          setTabIndex={setTabIndex}
                         ></UserInfo>
                       );
                     })}
                 </List>
               ) : (
-                <Box>No users</Box>
+                <Box>Нет пользователей</Box>
               )}
             </TabPanel>
           </TabPanels>

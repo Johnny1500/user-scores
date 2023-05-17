@@ -7,19 +7,22 @@ import {
   IconButton,
   Text,
   Divider,
+  Flex,
 } from "@chakra-ui/react";
 import { DeleteIcon, AddIcon, MinusIcon } from "@chakra-ui/icons";
 
 interface UserInfoProps {
   user: User;
-  setUsers?: any;
+  setUsers: React.Dispatch<React.SetStateAction<User[]>>;
+  setTabIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export function UserInfo({
-  user: { id, username, avatar, score, row },
+  user: { id, username, avatar, score, group },
   setUsers,
+  setTabIndex
 }: UserInfoProps): JSX.Element {
-  const changeRaiting = (newScore: number) => {
+  const changeRaiting = (newScore: number, newGroup: string) => {
     setUsers((prev: User[]) => {
       const tempArr = [...prev];
       const indexOfUser = tempArr.findIndex((user) => user.id === id);
@@ -29,25 +32,25 @@ export function UserInfo({
         username,
         avatar,
         score: newScore,
-        row: false,
+        group: group === "none" ? newGroup : group,
       });
-     
+
       return tempArr;
     });
   };
 
   const increaseRaiting = () => {
+    if(group === "none") setTabIndex(0);
     const newScore = score + 1;
-    changeRaiting(newScore);
-    console.log(`user increase raiting for ${username}`)
-
+    changeRaiting(newScore, "respectable");
+    console.log(`[User]: User increase raiting for ${username}`);
   };
 
   const decreaseRaiting = () => {
+    if(group === "none") setTabIndex(1);
     const newScore = score - 1;
-    changeRaiting(newScore);
-    console.log(`user decrease raiting for ${username}`)
-
+    changeRaiting(newScore, "bully");
+    console.log(`[User]: User decrease raiting for ${username}`);
   };
 
   return (
@@ -55,7 +58,7 @@ export function UserInfo({
       <ListItem key={id} className="list__item">
         <Avatar name={username} src={avatar} mr={2} />
         <Box>{username}</Box>
-        <Box ml={2} className="btn-block">
+        <Flex ml={2}>          
           <IconButton
             aria-label="Increase raiting"
             icon={<AddIcon />}
@@ -74,8 +77,8 @@ export function UserInfo({
             style={{ borderRadius: "500px" }}
             ml={1}
             onClick={() => decreaseRaiting()}
-          />
-        </Box>
+          />          
+        </Flex>
       </ListItem>
       <Divider />
     </>

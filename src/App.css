@@ -2,8 +2,8 @@
   height: 100vh;
   height: 100dvh;
   background-color: rgb(240, 240, 240);
-  padding: 2rem;
-  padding-left: 3rem;
+  padding: 0.5rem;
+  padding-top: 1rem;
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -20,19 +20,21 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.3rem;  
+  margin-bottom: 0.3rem;
 }
 
-.btn-block {
-    display: flex;
-    flex-direction: row;
+@media (min-width: 390px) {
+  #root {
+    padding-left: 1.1rem;
+    padding-top: 2rem;
+  }
 }
 
 @media (min-width: 900px) {
   #root {
     flex-direction: row;
-    gap: 8rem;
+    gap: 3rem;
     justify-content: center;
-    padding-top: 10rem;    
+    padding-top: 10rem;
   }
 }

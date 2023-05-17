@@ -3,5 +3,5 @@ export interface User {
     username: string;
     avatar: string;
     score: number;
-    row: boolean
+    group: string;
   }
