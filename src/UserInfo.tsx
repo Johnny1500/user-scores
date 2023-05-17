@@ -19,7 +19,7 @@ import {
   ModalCloseButton,
   Portal,
 } from "@chakra-ui/react";
-import { AddIcon, MinusIcon } from "@chakra-ui/icons";
+import { AddIcon, MinusIcon, DeleteIcon } from "@chakra-ui/icons";
 
 interface UserInfoProps {
   user: User;
@@ -34,7 +34,7 @@ export function UserInfo({
 }: UserInfoProps): JSX.Element {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const changeRaiting = (newScore: number, newGroup: string) => {
+  const changeRaiting = (newScore: number, newGroup: string, keep = true) => {
     setUsers((prev: User[]) => {
       const tempArr = [...prev];
 
@@ -45,14 +45,15 @@ export function UserInfo({
         username,
         avatar,
         score: newScore,
-        group: group === "none" ? newGroup : newScore == 0 ? "none" : group,
+        group:
+          group === "none" ? newGroup : newScore == 0 && !keep ? "none" : group,
       });
 
       return tempArr;
     });
   };
 
-  const increaseRaiting = () => {
+  const increaseRating = () => {
     if (group === "none") setTabIndex(0);
     const newScore = score + 1;
     changeRaiting(newScore, "respectable");
@@ -61,7 +62,7 @@ export function UserInfo({
     if (newScore >= 5) onOpen();
   };
 
-  const decreaseRaiting = () => {
+  const decreaseRating = () => {
     if (group === "none") setTabIndex(1);
     const newScore = score - 1;
     changeRaiting(newScore, "bully");
@@ -71,16 +72,25 @@ export function UserInfo({
   };
 
   let modalText: string | null = null;
+  let increaseBtnDisabled = false;
+  let decreaseBtnDisabled = false;
+
+  if (score === 0) {
+    if (group === "respectable") decreaseBtnDisabled = true;
+    if (group === "bully") increaseBtnDisabled = true;
+  }
 
   if (score >= 5) {
     modalText = `Нужно вознаградить ${username}. Сделать это?`;
+    increaseBtnDisabled = true;
   } else if (score <= -5) {
     modalText = `Пора забанить ${username}. Сделать это?`;
+    decreaseBtnDisabled = true;
   }
 
   const handleBtnModal = () => {
     const newScore = 0;
-    changeRaiting(newScore, "none");
+    changeRaiting(newScore, "none", false);
     console.log(`[User]: User returned ${username} to the list`);
     onClose();
   };
@@ -92,24 +102,37 @@ export function UserInfo({
         <Box>{username}</Box>
         <Flex ml={2}>
           <IconButton
-            aria-label="Increase raiting"
+            aria-label="Increase rating"
             icon={<AddIcon />}
             colorScheme="teal"
             size="sm"
             style={{ borderRadius: "500px" }}
             mr={1}
-            onClick={() => increaseRaiting()}
+            onClick={() => increaseRating()}
+            isDisabled={increaseBtnDisabled}
           />
           {group !== "none" ? <Text fontSize="lg">{score}</Text> : null}
           <IconButton
-            aria-label="Increase raiting"
+            aria-label="Decrease rating"
             icon={<MinusIcon />}
             colorScheme="teal"
             size="sm"
             style={{ borderRadius: "500px" }}
             ml={1}
-            onClick={() => decreaseRaiting()}
+            onClick={() => decreaseRating()}
+            isDisabled={decreaseBtnDisabled}
           />
+          {group !== "none" && score === 0 ? (
+            <IconButton
+              aria-label="Return user"
+              icon={<DeleteIcon />}
+              colorScheme="red"
+              size="sm"
+              style={{ borderRadius: "500px" }}
+              ml={1}
+              onClick={() => handleBtnModal()}
+            />
+          ) : null}
         </Flex>
       </ListItem>
       <Divider />

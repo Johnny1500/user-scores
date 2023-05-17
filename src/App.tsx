@@ -24,7 +24,7 @@ function App() {
   const [users, setUsers] = useState<User[]>([]);
   const [tabIndex, setTabIndex] = useState<number>(0);
 
-  const fetchUsers = useCallback(async function() {
+  const fetchUsers = useCallback(async function () {
     const response = await fetch(
       "https://random-data-api.com/api/users/random_user?size=3"
     );
@@ -45,35 +45,27 @@ function App() {
       });
 
       return remoteUsers;
-            
     } else {
       throw new Error(response.statusText);
     }
-  }, [])
+  }, []);
 
   async function increaseAmountOfUsers() {
-
+    console.log(`[User]: Amount of users was increased`);
     const newRemoteUsers = await fetchUsers();
     setUsers((prev) => [...prev, ...newRemoteUsers]);
-
   }
 
   async function refreshUsers() {
-
+    console.log(`[User]: User list was refreshed`);
     const remoteUsers = await fetchUsers();
     setUsers(remoteUsers);
-
   }
 
   useEffect(() => {
-    
-    console.log('useEffect test');
-    
     async function initialFetchUsers() {
-
       const remoteUsers = await fetchUsers();
       setUsers(remoteUsers);
-  
     }
 
     initialFetchUsers();
@@ -138,9 +130,7 @@ function App() {
         </CardBody>
       </Card>
       <Card p={3} pt={1} minW="360px">
-        <CardHeader fontSize="xl" pl={0}>
-          Пользователи с рейтингом
-        </CardHeader>
+        <CardHeader fontSize="xl">Пользователи с рейтингом</CardHeader>
         <Divider mb={2} style={{ borderWidth: "1px", borderColor: "#000" }} />
         <CardBody>
           <Tabs
