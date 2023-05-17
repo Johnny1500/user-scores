@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "./App.css";
 import {
   List,
@@ -24,7 +24,7 @@ function App() {
   const [users, setUsers] = useState<User[]>([]);
   const [tabIndex, setTabIndex] = useState<number>(0);
 
-  async function fetchUsers() {
+  const fetchUsers = useCallback(async function() {
     const response = await fetch(
       "https://random-data-api.com/api/users/random_user?size=3"
     );
@@ -44,20 +44,37 @@ function App() {
         };
       });
 
-      setUsers(remoteUsers);
-      console.log("users", users);
+      return remoteUsers;
+            
     } else {
       throw new Error(response.statusText);
     }
+  }, [])
+
+  async function increaseAmountOfUsers() {
+
+    const newRemoteUsers = await fetchUsers();
+    setUsers((prev) => [...prev, ...newRemoteUsers]);
+
+  }
+
+  async function initialFetchUsers() {
+
+    const remoteUsers = await fetchUsers();
+    setUsers(remoteUsers);
+
   }
 
   useEffect(() => {
-    fetchUsers();
+    
+    console.log('useEffect test');
+     
+    initialFetchUsers();
 
     return () => {
       setUsers([]);
     };
-  }, []);
+  }, [fetchUsers]);
 
   return (
     <>
@@ -75,7 +92,7 @@ function App() {
                 size="sm"
                 style={{ borderRadius: "500px" }}
                 mr={2}
-                onClick={() => console.log("test")}
+                onClick={() => increaseAmountOfUsers()}
               />
             </Tooltip>
             <Tooltip label="Обновить список пользователей">
@@ -86,7 +103,7 @@ function App() {
                 size="sm"
                 style={{ borderRadius: "500px" }}
                 mr={1}
-                onClick={() => console.log("test")}
+                onClick={() => initialFetchUsers()}
               />
             </Tooltip>
           </Box>
