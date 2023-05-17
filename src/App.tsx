@@ -49,7 +49,7 @@ function App() {
         };
       });
 
-      setTimeout(() => setLoading(false), 500);
+      setTimeout(() => setLoading(false), 2000);
 
       return remoteUsers;
     } else {
