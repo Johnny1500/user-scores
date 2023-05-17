@@ -1,9 +1,10 @@
 #root {
-  height: 100vh;
-  height: 100dvh;
+  height: fit-content;
+  min-height: 100vh;
+  min-height: 100dvh;
   background-color: rgb(240, 240, 240);
   padding: 0.5rem;
-  padding-top: 1rem;
+  padding-top: 1rem;  
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -35,6 +36,10 @@
     flex-direction: row;
     gap: 3rem;
     justify-content: center;
-    padding-top: 10rem;
+    padding-top: 5rem;
+  }
+
+  .card {
+    margin-bottom: 1rem;
   }
 }
