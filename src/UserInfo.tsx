@@ -5,9 +5,19 @@ import {
   Avatar,
   Box,
   IconButton,
+  Button,
   Text,
   Divider,
   Flex,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Portal,
 } from "@chakra-ui/react";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 
@@ -22,9 +32,12 @@ export function UserInfo({
   setUsers,
   setTabIndex,
 }: UserInfoProps): JSX.Element {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const changeRaiting = (newScore: number, newGroup: string) => {
     setUsers((prev: User[]) => {
       const tempArr = [...prev];
+
       const indexOfUser = tempArr.findIndex((user) => user.id === id);
 
       tempArr.splice(indexOfUser, 1, {
@@ -32,7 +45,7 @@ export function UserInfo({
         username,
         avatar,
         score: newScore,
-        group: group === "none" ? newGroup : group,
+        group: group === "none" ? newGroup : newScore == 0 ? "none" : group,
       });
 
       return tempArr;
@@ -43,14 +56,33 @@ export function UserInfo({
     if (group === "none") setTabIndex(0);
     const newScore = score + 1;
     changeRaiting(newScore, "respectable");
-    console.log(`[User]: User increase raiting for ${username}`);
+    console.log(`[User]: User increased rating for ${username}`);
+
+    if (newScore >= 5) onOpen();
   };
 
   const decreaseRaiting = () => {
     if (group === "none") setTabIndex(1);
     const newScore = score - 1;
     changeRaiting(newScore, "bully");
-    console.log(`[User]: User decrease raiting for ${username}`);
+    console.log(`[User]: User lowered rating for ${username}`);
+
+    if (newScore <= -5) onOpen();
+  };
+
+  let modalText: string | null = null;
+
+  if (score >= 5) {
+    modalText = `Нужно вознаградить ${username}. Сделать это?`;
+  } else if (score <= -5) {
+    modalText = `Пора забанить ${username}. Сделать это?`;
+  }
+
+  const handleBtnModal = () => {
+    const newScore = 0;
+    changeRaiting(newScore, "none");
+    console.log(`[User]: User returned ${username} to the list`);
+    onClose();
   };
 
   return (
@@ -81,6 +113,23 @@ export function UserInfo({
         </Flex>
       </ListItem>
       <Divider />
+      <Portal>
+        <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Информация</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Box>{modalText}</Box>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="teal" onClick={() => handleBtnModal()}>
+                Да
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </Portal>
     </>
   );
 }

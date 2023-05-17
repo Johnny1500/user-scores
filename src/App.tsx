@@ -58,7 +58,7 @@ function App() {
 
   }
 
-  async function initialFetchUsers() {
+  async function refreshUsers() {
 
     const remoteUsers = await fetchUsers();
     setUsers(remoteUsers);
@@ -68,7 +68,14 @@ function App() {
   useEffect(() => {
     
     console.log('useEffect test');
-     
+    
+    async function initialFetchUsers() {
+
+      const remoteUsers = await fetchUsers();
+      setUsers(remoteUsers);
+  
+    }
+
     initialFetchUsers();
 
     return () => {
@@ -78,7 +85,7 @@ function App() {
 
   return (
     <>
-      <Card className="card" minW="360px">
+      <Card className="card" minW="350px">
         <CardHeader fontSize="xl">
           <Box>
             <Box display="inline" mr={3}>
@@ -103,7 +110,7 @@ function App() {
                 size="sm"
                 style={{ borderRadius: "500px" }}
                 mr={1}
-                onClick={() => initialFetchUsers()}
+                onClick={() => refreshUsers()}
               />
             </Tooltip>
           </Box>
@@ -130,7 +137,7 @@ function App() {
           </List>
         </CardBody>
       </Card>
-      <Card p={5} pt={1} minW="360px">
+      <Card p={3} pt={1} minW="360px">
         <CardHeader fontSize="xl" pl={0}>
           Пользователи с рейтингом
         </CardHeader>
