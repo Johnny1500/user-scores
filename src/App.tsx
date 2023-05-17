@@ -14,6 +14,8 @@ import {
   CardBody,
   IconButton,
   Tooltip,
+  Stack,
+  Skeleton 
 } from "@chakra-ui/react";
 import { PlusSquareIcon, RepeatIcon } from "@chakra-ui/icons";
 
@@ -23,8 +25,11 @@ import UserInfo from "./UserInfo";
 function App() {
   const [users, setUsers] = useState<User[]>([]);
   const [tabIndex, setTabIndex] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchUsers = useCallback(async function () {
+    setLoading(true);
+
     const response = await fetch(
       "https://random-data-api.com/api/users/random_user?size=3"
     );
@@ -43,6 +48,8 @@ function App() {
           group: "none",
         };
       });
+
+      setTimeout(() => setLoading(false), 500);
 
       return remoteUsers;
     } else {
@@ -113,24 +120,33 @@ function App() {
           />
         </CardHeader>
         <CardBody pt={1}>
-          <List>
-            {users
-              .filter((user) => user.group === "none")
-              .map((user) => {
-                return (
-                  <UserInfo
-                    key={user.id}
-                    user={user}
-                    setUsers={setUsers}
-                    setTabIndex={setTabIndex}
-                  ></UserInfo>
-                );
-              })}
-          </List>
+          {loading ? (
+            <Stack>
+              <Skeleton h="48px" w="300px" />
+              <Skeleton h="48px" w="300px" />
+              <Skeleton h="48px" w="300px" />
+            </Stack>
+          ) : (
+            <List>
+              {users
+                .filter((user) => user.group === "none")
+                .map((user) => {
+                  return (
+                    <UserInfo
+                      key={user.id}
+                      user={user}
+                      setUsers={setUsers}
+                      setTabIndex={setTabIndex}
+                    ></UserInfo>
+                  );
+                })}
+            </List>
+          )}
         </CardBody>
       </Card>
+
       <Card p={3} pt={1} minW="360px">
-        <CardHeader fontSize="xl">Пользователи с рейтингом</CardHeader>
+        <CardHeader fontSize="xl" pl={0}>Пользователи с рейтингом</CardHeader>
         <Divider mb={2} style={{ borderWidth: "1px", borderColor: "#000" }} />
         <CardBody>
           <Tabs
