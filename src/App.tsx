@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import {
   List,
@@ -14,8 +14,9 @@ import {
   CardBody,
   IconButton,
   Tooltip,
-  Stack,
-  Skeleton 
+  Skeleton,
+  SkeletonCircle,
+  Flex,
 } from "@chakra-ui/react";
 import { PlusSquareIcon, RepeatIcon } from "@chakra-ui/icons";
 
@@ -24,12 +25,12 @@ import UserInfo from "./UserInfo";
 
 function App() {
   const [users, setUsers] = useState<User[]>(() => {
-    return JSON.parse(localStorage.getItem('Users-score') || '[]')
+    return JSON.parse(localStorage.getItem("Users-score") || "[]");
   });
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchUsers = useCallback(async function () {
+  async function fetchUsers() {
     setLoading(true);
 
     const response = await fetch(
@@ -57,7 +58,7 @@ function App() {
     } else {
       throw new Error(response.statusText);
     }
-  }, []);
+  }
 
   async function increaseAmountOfUsers() {
     console.log(`[User-rating]: Amount of users was increased`);
@@ -76,14 +77,12 @@ function App() {
       const remoteUsers = await fetchUsers();
       setUsers(remoteUsers);
     }
-
-    console.log('useEffect 1', users);
-    if(users.length === 0) initialFetchUsers();
     
-  }, [fetchUsers]);
+    if (users.length === 0) initialFetchUsers();
+  });
 
   useEffect(() => {
-    localStorage.setItem('Users-score', JSON.stringify(users));
+    localStorage.setItem("Users-score", JSON.stringify(users));
   }, [users]);
 
   return (
@@ -127,11 +126,22 @@ function App() {
         </CardHeader>
         <CardBody pt={1}>
           {loading ? (
-            <Stack>
-              <Skeleton h="48px" w="300px" />
-              <Skeleton h="48px" w="300px" />
-              <Skeleton h="48px" w="300px" />
-            </Stack>
+            Array.from({ length: 3 }).map((item, index) => (
+              <Flex
+                textAlign="center"
+                gap={3}
+                pb={3}
+                direction="row"
+                key={index}
+              >
+                <Box>
+                  <SkeletonCircle h="10" w="10" />
+                </Box>
+                <Box>
+                  <Skeleton h="40px" w="250px" />
+                </Box>
+              </Flex>
+            ))
           ) : (
             <List data-cy="main-list">
               {users
@@ -152,7 +162,9 @@ function App() {
       </Card>
 
       <Card p={3} pt={1} minW="360px">
-        <CardHeader fontSize="xl" pl={0}>Пользователи с рейтингом</CardHeader>
+        <CardHeader fontSize="xl" pl={0}>
+          Пользователи с рейтингом
+        </CardHeader>
         <Divider mb={2} style={{ borderWidth: "1px", borderColor: "#000" }} />
         <CardBody>
           <Tabs
