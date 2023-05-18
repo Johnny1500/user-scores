@@ -97,7 +97,7 @@ export function UserInfo({
 
   return (
     <>
-      <ListItem key={id} className="list__item">
+      <ListItem key={id} className="list__item" data-cy={`list-item-${id}`}>
         <Avatar name={username} src={avatar} mr={2} />
         <Box data-cy={`username-${id}`}>{username}</Box>
         <Flex ml={2}>

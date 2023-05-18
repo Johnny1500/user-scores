@@ -20,18 +20,33 @@ describe("user-score stub", () => {
     cy.wait(1000);
     for (let i = 0; i < sizes.length; i++) {
       cy.viewport(sizes[i][0], sizes[i][1]);
-      cy.wait(2000);
+      cy.wait(1000);
     }
   });
 
   it("Users' list render", () => {
     cy.wait("@getUsers");
     cy.wait(1000);
-    cy.get('[data-cy*="username-4912"]').should("have.text", "mauro.legros");
-    cy.get('[data-cy*="username-2761"]').should("have.text", "tyson.waters");
-    cy.get('[data-cy*="username-7608"]').should("have.text", "fermin.teller");
+    cy.get('[data-cy*="username-4912"]')
+      .should("have.text", "mauro.legros")
+      .parent()
+      .should("have.attr", "data-cy", "list-item-4912")
+      .parent()
+      .should("have.attr", "data-cy", "main-list");
+    cy.get('[data-cy*="username-2761"]')
+      .should("have.text", "tyson.waters")
+      .parent()
+      .should("have.attr", "data-cy", "list-item-2761")
+      .parent()
+      .should("have.attr", "data-cy", "main-list");
+    cy.get('[data-cy*="username-7608"]')
+      .should("have.text", "fermin.teller")
+      .parent()
+      .should("have.attr", "data-cy", "list-item-7608")
+      .parent()
+      .should("have.attr", "data-cy", "main-list");
   });
-  
+
   it("Refresh list", () => {
     cy.get('[data-cy*="refresh-users"]')
       .click()
@@ -42,18 +57,24 @@ describe("user-score stub", () => {
         cy.wait(1000);
       })
       .then(() => {
-        cy.get('[data-cy*="username-4912"]').should(
-          "have.text",
-          "mauro.legros"
-        );
-        cy.get('[data-cy*="username-2761"]').should(
-          "have.text",
-          "tyson.waters"
-        );
-        cy.get('[data-cy*="username-7608"]').should(
-          "have.text",
-          "fermin.teller"
-        );
+        cy.get('[data-cy*="username-4912"]')
+          .should("have.text", "mauro.legros")
+          .parent()
+          .should("have.attr", "data-cy", "list-item-4912")
+          .parent()
+          .should("have.attr", "data-cy", "main-list");
+        cy.get('[data-cy*="username-2761"]')
+          .should("have.text", "tyson.waters")
+          .parent()
+          .should("have.attr", "data-cy", "list-item-2761")
+          .parent()
+          .should("have.attr", "data-cy", "main-list");
+        cy.get('[data-cy*="username-7608"]')
+          .should("have.text", "fermin.teller")
+          .parent()
+          .should("have.attr", "data-cy", "list-item-7608")
+          .parent()
+          .should("have.attr", "data-cy", "main-list");
       });
   });
 
@@ -61,7 +82,13 @@ describe("user-score stub", () => {
     cy.get('[data-cy*="increase-rating-btn-4912"]')
       .click()
       .then(() => {
-        cy.get('[data-cy*="score-4912"]').should("have.text", "1");
+        cy.get('[data-cy*="score-4912"]')
+          .should("have.text", "1")
+          .parent()
+          .parent()
+          .should("have.attr", "data-cy", "list-item-4912")
+          .parent()
+          .should("have.attr", "data-cy", "respectable-list");
       })
       .then(() => {
         cy.get('[data-cy*="increase-rating-btn-4912"]').click();
@@ -77,6 +104,7 @@ describe("user-score stub", () => {
       })
       .then(() => {
         cy.get('[data-cy*="score-4912"]').should("have.text", "5");
+        cy.get('[data-cy*="increase-rating-btn-4912"]').should('be.disabled');
       })
       .then(() => {
         cy.get('[data-cy*="modal-text-4912"]').should(
@@ -86,14 +114,25 @@ describe("user-score stub", () => {
       })
       .then(() => {
         cy.get('[data-cy*="modal-confirm-btn-4912"]').click();
-      });
+      })
+      .then(() => {
+        cy.get('[data-cy*="list-item-4912"]')
+          .parent()
+          .should("have.attr", "data-cy", "main-list");
+      });      
   });
 
   it("Deacrease rating", () => {
     cy.get('[data-cy*="deacrease-rating-btn-4912"]')
       .click()
       .then(() => {
-        cy.get('[data-cy*="score-4912"]').should("have.text", "-1");
+        cy.get('[data-cy*="score-4912"]')
+          .should("have.text", "-1")
+          .parent()
+          .parent()
+          .should("have.attr", "data-cy", "list-item-4912")
+          .parent()
+          .should("have.attr", "data-cy", "bully-list");
       })
       .then(() => {
         cy.get('[data-cy*="deacrease-rating-btn-4912"]').click();
@@ -109,6 +148,7 @@ describe("user-score stub", () => {
       })
       .then(() => {
         cy.get('[data-cy*="score-4912"]').should("have.text", "-5");
+        cy.get('[data-cy*="deacrease-rating-btn-4912"]').should('be.disabled');
       })
       .then(() => {
         cy.get('[data-cy*="modal-text-4912"]').should(
@@ -118,10 +158,15 @@ describe("user-score stub", () => {
       })
       .then(() => {
         cy.get('[data-cy*="modal-confirm-btn-4912"]').click();
+      })
+      .then(() => {
+        cy.get('[data-cy*="list-item-4912"]')
+          .parent()
+          .should("have.attr", "data-cy", "main-list");
       });
   });
 
-  it.only("Return btn", () => {
+  it("Return btn", () => {
     cy.get('[data-cy*="increase-rating-btn-4912"]')
       .click()
       .then(() => {
@@ -136,7 +181,10 @@ describe("user-score stub", () => {
       .then(() => {
         cy.get('[data-cy*="return-user-btn-4912"]').click();
       })
-
+      .then(() => {
+        cy.get('[data-cy*="list-item-4912"]')
+          .parent()
+          .should("have.attr", "data-cy", "main-list");
+      });
   });
-
 });

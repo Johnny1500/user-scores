@@ -129,7 +129,7 @@ function App() {
               <Skeleton h="48px" w="300px" />
             </Stack>
           ) : (
-            <List>
+            <List data-cy="main-list">
               {users
                 .filter((user) => user.group === "none")
                 .map((user) => {
@@ -165,7 +165,7 @@ function App() {
             <TabPanels>
               <TabPanel>
                 {users.filter((user) => user.group === "respectable").length ? (
-                  <List>
+                  <List data-cy="respectable-list">
                     {users
                       .filter((user) => user.group === "respectable")
                       .map((user) => {
@@ -185,7 +185,7 @@ function App() {
               </TabPanel>
               <TabPanel>
                 {users.filter((user) => user.group === "bully").length ? (
-                  <List>
+                  <List data-cy="bully-list">
                     {users
                       .filter((user) => user.group === "bully")
                       .map((user) => {
