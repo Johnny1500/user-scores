@@ -126,7 +126,7 @@ function App() {
         </CardHeader>
         <CardBody pt={1}>
           {loading ? (
-            Array.from({ length: 3 }).map((item, index) => (
+            Array.from({ length: 3 }).map((_, index) => (
               <Flex
                 textAlign="center"
                 gap={3}

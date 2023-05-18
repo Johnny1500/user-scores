@@ -1,2 +1,4 @@
-# Fine weather
-## An app for user rating
+#  User-scores
+## Приложение для пользовательского рейтинга
+### UI сделан при помощи Chakra.js
+### Тестирование - Cypress
