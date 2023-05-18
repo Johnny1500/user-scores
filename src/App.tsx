@@ -49,7 +49,7 @@ function App() {
         };
       });
 
-      setTimeout(() => setLoading(false), 2000);
+      setTimeout(() => setLoading(false), 500);
 
       return remoteUsers;
     } else {
@@ -58,13 +58,13 @@ function App() {
   }, []);
 
   async function increaseAmountOfUsers() {
-    console.log(`[User]: Amount of users was increased`);
+    console.log(`[User-rating]: Amount of users was increased`);
     const newRemoteUsers = await fetchUsers();
     setUsers((prev) => [...prev, ...newRemoteUsers]);
   }
 
   async function refreshUsers() {
-    console.log(`[User]: User list was refreshed`);
+    console.log(`[User-rating]: User list was refreshed`);
     const remoteUsers = await fetchUsers();
     setUsers(remoteUsers);
   }
@@ -99,6 +99,7 @@ function App() {
                 style={{ borderRadius: "500px" }}
                 mr={2}
                 onClick={() => increaseAmountOfUsers()}
+                data-cy="increase-amount-of-users-btn"
               />
             </Tooltip>
             <Tooltip label="Обновить список пользователей">
@@ -110,6 +111,7 @@ function App() {
                 style={{ borderRadius: "500px" }}
                 mr={1}
                 onClick={() => refreshUsers()}
+                data-cy="refresh-users"
               />
             </Tooltip>
           </Box>

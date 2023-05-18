@@ -57,7 +57,7 @@ export function UserInfo({
     if (group === "none") setTabIndex(0);
     const newScore = score + 1;
     changeRaiting(newScore, "respectable");
-    console.log(`[User]: User increased rating for ${username}`);
+    console.log(`[User-rating]: User increased rating for ${username}`);
 
     if (newScore >= 5) onOpen();
   };
@@ -66,7 +66,7 @@ export function UserInfo({
     if (group === "none") setTabIndex(1);
     const newScore = score - 1;
     changeRaiting(newScore, "bully");
-    console.log(`[User]: User lowered rating for ${username}`);
+    console.log(`[User-rating]: User lowered rating for ${username}`);
 
     if (newScore <= -5) onOpen();
   };
@@ -91,7 +91,7 @@ export function UserInfo({
   const handleBtnModal = () => {
     const newScore = 0;
     changeRaiting(newScore, "none", false);
-    console.log(`[User]: User returned ${username} to the list`);
+    console.log(`[User-rating]: User returned ${username} to the list`);
     onClose();
   };
 
@@ -99,7 +99,7 @@ export function UserInfo({
     <>
       <ListItem key={id} className="list__item">
         <Avatar name={username} src={avatar} mr={2} />
-        <Box>{username}</Box>
+        <Box data-cy={`username-${id}`}>{username}</Box>
         <Flex ml={2}>
           <IconButton
             aria-label="Increase rating"
@@ -110,8 +110,13 @@ export function UserInfo({
             mr={1}
             onClick={() => increaseRating()}
             isDisabled={increaseBtnDisabled}
+            data-cy={`increase-rating-btn-${id}`}
           />
-          {group !== "none" ? <Text fontSize="lg">{score}</Text> : null}
+          {group !== "none" ? (
+            <Text data-cy={`score-${id}`} fontSize="lg">
+              {score}
+            </Text>
+          ) : null}
           <IconButton
             aria-label="Decrease rating"
             icon={<MinusIcon />}
@@ -121,6 +126,7 @@ export function UserInfo({
             ml={1}
             onClick={() => decreaseRating()}
             isDisabled={decreaseBtnDisabled}
+            data-cy={`deacrease-rating-btn-${id}`}
           />
           {group !== "none" && score === 0 ? (
             <IconButton
@@ -131,6 +137,7 @@ export function UserInfo({
               style={{ borderRadius: "500px" }}
               ml={1}
               onClick={() => handleBtnModal()}
+              data-cy={`return-user-btn-${id}`}
             />
           ) : null}
         </Flex>
@@ -143,10 +150,14 @@ export function UserInfo({
             <ModalHeader>Информация</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Box>{modalText}</Box>
+              <Box data-cy={`modal-text-${id}`}>{modalText}</Box>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="teal" onClick={() => handleBtnModal()}>
+              <Button
+                colorScheme="teal"
+                onClick={() => handleBtnModal()}
+                data-cy={`modal-confirm-btn-${id}`}
+              >
                 Да
               </Button>
             </ModalFooter>
