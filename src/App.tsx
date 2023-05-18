@@ -23,7 +23,9 @@ import { User } from "./interfaces";
 import UserInfo from "./UserInfo";
 
 function App() {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[]>(() => {
+    return JSON.parse(localStorage.getItem('Users-score') || '[]')
+  });
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -75,12 +77,14 @@ function App() {
       setUsers(remoteUsers);
     }
 
-    initialFetchUsers();
-
-    return () => {
-      setUsers([]);
-    };
+    console.log('useEffect 1', users);
+    if(users.length === 0) initialFetchUsers();
+    
   }, [fetchUsers]);
+
+  useEffect(() => {
+    localStorage.setItem('Users-score', JSON.stringify(users));
+  }, [users]);
 
   return (
     <>

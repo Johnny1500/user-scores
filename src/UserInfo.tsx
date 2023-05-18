@@ -91,7 +91,7 @@ export function UserInfo({
   const handleBtnModal = () => {
     const newScore = 0;
     changeRaiting(newScore, "none", false);
-    console.log(`[User-rating]: User returned ${username} to the list`);
+    console.log(`[User-rating]: User returned ${username} to the main list`);
     onClose();
   };
 
