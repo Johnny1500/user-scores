@@ -52,6 +52,7 @@ function App() {
         };
       });
 
+      // Задержка для UX
       setTimeout(() => setLoading(false), 500);
 
       return remoteUsers;
@@ -81,6 +82,7 @@ function App() {
     if (users.length === 0) initialFetchUsers();
   });
 
+  // Сохранение пользователей в localStorage для перезагрузки
   useEffect(() => {
     localStorage.setItem("Users-score", JSON.stringify(users));
   }, [users]);

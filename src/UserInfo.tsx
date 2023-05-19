@@ -27,14 +27,17 @@ interface UserInfoProps {
   setTabIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
+// Информация о пользователе
 export function UserInfo({
   user: { id, username, avatar, score, group },
   setUsers,
   setTabIndex,
 }: UserInfoProps): JSX.Element {
+  
+  // Хук для модалки
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const changeRaiting = (newScore: number, newGroup: string, keep = true) => {
+  const changeRating = (newScore: number, newGroup: string, keep = true) => {
     setUsers((prev: User[]) => {
       const tempArr = [...prev];
 
@@ -56,7 +59,7 @@ export function UserInfo({
   const increaseRating = () => {
     if (group === "none") setTabIndex(0);
     const newScore = score + 1;
-    changeRaiting(newScore, "respectable");
+    changeRating(newScore, "respectable");
     console.log(`[User-rating]: User increased rating for ${username}`);
 
     if (newScore >= 5) onOpen();
@@ -65,7 +68,7 @@ export function UserInfo({
   const decreaseRating = () => {
     if (group === "none") setTabIndex(1);
     const newScore = score - 1;
-    changeRaiting(newScore, "bully");
+    changeRating(newScore, "bully");
     console.log(`[User-rating]: User lowered rating for ${username}`);
 
     if (newScore <= -5) onOpen();
@@ -90,7 +93,7 @@ export function UserInfo({
 
   const handleBtnModal = () => {
     const newScore = 0;
-    changeRaiting(newScore, "none", false);
+    changeRating(newScore, "none", false);
     console.log(`[User-rating]: User returned ${username} to the main list`);
     onClose();
   };
